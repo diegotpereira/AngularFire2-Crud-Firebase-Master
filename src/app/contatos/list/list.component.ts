@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { Contato} from './../shared/contato';
+import { ContatoService } from '../shared/contato.service';
+import { ContatoDataService } from '../shared/contato-data.service';
 
 @Component({
   selector: 'app-list',
@@ -7,9 +12,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListComponent implements OnInit {
 
-  constructor() { }
+  contatos: Observable<any>;
 
-  ngOnInit(): void {
+  constructor(
+              private contatoService: ContatoService,
+              private contatoDataService: ContatoDataService
+  ) { }
+
+  ngOnInit(){
+    this.contatos = this.contatoService.getAll();
+  }
+
+  delete(key: string) {
+    this.contatoService.delete(key);
+  }
+
+  edit(contato: Contato, key: string) {
+    this.contatoDataService.changeContato(contato, key);
   }
 
 }
